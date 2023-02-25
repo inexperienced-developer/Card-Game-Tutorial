@@ -32,12 +32,6 @@ public class NetworkManager : Singleton<NetworkManager>
     {
         Server = new Server();
         Server.Start(m_Port, m_MaxPlayers);
-        Server.ClientDisconnected += OnClientDisconnect;
-    }
-
-    private void OnClientDisconnect(object sender, ServerDisconnectedEventArgs e)
-    {
-        Destroy(PlayerManager.GetPlayer(e.Client.Id).gameObject);
     }
 
     private void FixedUpdate()
