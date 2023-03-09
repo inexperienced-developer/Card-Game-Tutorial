@@ -1,9 +1,6 @@
-using InexperiencedDeveloper.Core;
 using Riptide;
 using Riptide.Utils;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum ServerToClientMsg : ushort
@@ -16,23 +13,49 @@ public enum ClientToServerMsg : ushort
     RequestLogin,
 }
 
-public class NetworkManager : Singleton<NetworkManager>
+public class NetworkManager : MonoBehaviour
 {
-    protected override void Awake()
+    [SerializeField] private NetworkSettingsSO m_netSettings;
+
+    private void Awake()
     {
-        base.Awake();
         RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, true);
     }
 
-    public Server Server;
-    [SerializeField] private ushort m_Port = 7777;
-    [SerializeField] private ushort m_MaxPlayers = 10;
+    public Server Server { get; private set; }
 
     private void Start()
     {
         Server = new Server();
-        Server.Start(m_Port, m_MaxPlayers);
+        Server.Start(m_netSettings.Port, m_netSettings.MaxPlayers);
         Server.ClientDisconnected += OnClientDisconnect;
+        Subscribe();
+    }
+
+    private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Subscribe()
+    {
+        NetworkEvents.SendMessageToPlayer += SendToPlayer;
+        NetworkEvents.SendMessageToAll += SendToAll;
+    }
+    private void Unsubscribe()
+    {
+        NetworkEvents.SendMessageToPlayer -= SendToPlayer;
+        NetworkEvents.SendMessageToAll -= SendToAll;
+    }
+
+    private void SendToAll(Message msg)
+    {
+        Server.SendToAll(msg);
+    }
+
+    private void SendToPlayer(Message msg, ushort id)
+    {
+        Server.Send(msg, id);
     }
 
     private void OnClientDisconnect(object sender, ServerDisconnectedEventArgs e)

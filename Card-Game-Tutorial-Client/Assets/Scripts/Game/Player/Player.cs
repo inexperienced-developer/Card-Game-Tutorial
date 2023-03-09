@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     {
         Message msg = Message.Create(MessageSendMode.Reliable, ClientToServerMsg.RequestLogin);
         msg.AddString(Username);
-        NetworkManager.Instance.Client.Send(msg);
+        NetworkEvents.OnSendMessage(msg);
     }
 
     #endregion

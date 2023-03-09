@@ -44,5 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4fcf6c1cf77ca34593e7548f83612a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Port: 7777
-  m_MaxPlayers: 10
+  m_netSettings: {fileID: 11400000, guid: 9fb01dec5a5d4ee4caad2f9ef3e6cd9c, type: 2}
