@@ -27,6 +27,5 @@ public class Player : MonoBehaviour
         NetworkEvents.Send(msg, Id);
     }
 
-
     #endregion
 }
