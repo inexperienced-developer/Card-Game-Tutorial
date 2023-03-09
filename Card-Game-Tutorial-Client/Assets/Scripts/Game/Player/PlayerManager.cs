@@ -1,11 +1,10 @@
-using InexperiencedDeveloper.Core;
 using Riptide;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : Singleton<PlayerManager>
+public class PlayerManager : MonoBehaviour
 {
+    [SerializeField] private NetworkSettingsSO m_netSettings;
     [SerializeField] private GameObject m_PlayerPrefab;
     private static GameObject s_PlayerPrefab;
     private static Dictionary<ushort, Player> s_Players = new Dictionary<ushort, Player>();
@@ -24,28 +23,43 @@ public class PlayerManager : Singleton<PlayerManager>
         return false;
     }
 
-    public static Player LocalPlayer => GetPlayer(NetworkManager.Instance.Client.Id);
-    public static bool IsLocalPlayer(ushort id) => id == LocalPlayer.Id;
+    private static ushort s_localId = ushort.MaxValue;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         s_PlayerPrefab = m_PlayerPrefab;
+        Subscribe();
     }
 
-    public void SpawnInitalPlayer(string username)
+    private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Subscribe()
+    {
+        NetworkEvents.ConnectSuccess += SpawnInitalPlayer;
+    }
+
+    private void Unsubscribe()
+    {
+        NetworkEvents.ConnectSuccess -= SpawnInitalPlayer;
+    }
+
+    public void SpawnInitalPlayer(ushort id, string username)
     {
         Player player = Instantiate(s_PlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<Player>();
         player.name = $"{username} -- LOCAL PLAYER (WAITING FOR SERVER)";
-        ushort id = NetworkManager.Instance.Client.Id;
         player.Init(id, username, true);
+        s_localId = id;
         s_Players.Add(id, player);
         player.RequestInit();
     }
 
     private static void InitializeLocalPlayer()
     {
-        LocalPlayer.name = $"{LocalPlayer.Username} -- {LocalPlayer.Id} -- LOCAL";
+        Player local = s_Players[s_localId];
+        local.name = $"{local.Username} -- {local.Id} -- LOCAL";
     }
 
     #region Messages
