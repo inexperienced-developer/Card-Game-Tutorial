@@ -510,8 +510,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 704571939}
+        m_TargetAssemblyTypeName: LoginUI, Assembly-CSharp
         m_MethodName: Connect
         m_Mode: 1
         m_Arguments:
@@ -1165,7 +1165,7 @@ GameObject:
   - component: {fileID: 704571940}
   - component: {fileID: 704571939}
   m_Layer: 0
-  m_Name: LocalSceneUI
+  m_Name: LoginUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7666,11 +7666,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NetworkManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 7482210088171922477, guid: 2e4632758e641cb46acc4148394ca951,
-        type: 3}
-      propertyPath: m_Port
-      value: 7778
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e4632758e641cb46acc4148394ca951, type: 3}
